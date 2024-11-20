@@ -1,0 +1,38 @@
+name: Q2 Workflow
+
+on:
+  push:  # Déclenché lors d'un push sur la branche principale
+    branches:
+      - main
+
+jobs:
+  create-and-push-file:
+    runs-on: ubuntu-latest  # Utilisation d'un runner Ubuntu
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Create Q2_archive_README.md
+        run: |
+          echo "Nom : Deslandes" > Q2_archive_README.md
+          echo "Prénom : Killian" >> Q2_archive_README.md
+          echo "Date et heure : $(date)" >> Q2_archive_README.md
+          echo "" >> Q2_archive_README.md
+          echo "Contenu de README.md :" >> Q2_archive_README.md
+          cat README.md >> Q2_archive_README.md
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "KillianDlds"
+          git config --global user.email "killian.deslandes53@gmail.com"
+
+      - name: Commit changes
+        run: |
+          git add Q2_archive_README.md
+          git commit -m "Add Q2_archive_README.md with execution details" || echo "No changes to commit"
+
+      - name: Push changes
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/KillianDlds/R5-07-DS.git
+          git push
