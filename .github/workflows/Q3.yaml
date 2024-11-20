@@ -21,7 +21,6 @@ jobs:
           fi
           echo "Nom : Deslandes" > Q3_archive_java.txt
           echo "Prénom : Killian" >> Q3_archive_java.txt
-          echo "Email : killian.deslandes53@gmail.com" >> Q3_archive_java.txt
           echo "" >> Q3_archive_java.txt
           echo "Contenu de Q3.java :" >> Q3_archive_java.txt
           cat Q3.java >> Q3_archive_java.txt
