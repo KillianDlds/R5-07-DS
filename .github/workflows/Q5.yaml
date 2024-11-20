@@ -13,10 +13,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Pull latest changes from remote repository
-        run: |
-          git pull origin main --rebase
-
       - name: Create Q5_archive_date.txt
         run: |
           DATE=$(date +%d-%m-%Y)
@@ -27,6 +23,10 @@ jobs:
           echo "" >> $FILENAME
           echo "Contenu de Q5.java :" >> $FILENAME
           cat Q5.java >> $FILENAME
+
+      - name: Check git status
+        run: |
+          git status
 
       - name: Configure Git
         run: |
