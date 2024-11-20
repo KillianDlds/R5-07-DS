@@ -1,0 +1,58 @@
+name: Q6 Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create-and-push-files:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Copy Q5.java to Q6.java and update class name
+        run: |
+          cp Q5.java Q6.java
+          sed -i 's/class Q5/class Q6/' Q6.java
+
+      - name: Create Q6_archive_date.txt
+        run: |
+          DATE=$(date +%d-%m-%Y-%H%M%S)
+          FILENAME="Q6_archive_${DATE}.txt"
+          
+          echo "Nom : Deslandes" > $FILENAME
+          echo "Prénom : Killian" >> $FILENAME
+          echo "" >> $FILENAME
+          echo "Contenu de Q6.java :" >> $FILENAME
+          cat Q6.java >> $FILENAME
+          echo "" >> $FILENAME
+          echo "Taille du fichier Q6.java (en lignes et caractères) :" >> $FILENAME
+          wc -l Q6.java >> $FILENAME
+          wc -m Q6.java >> $FILENAME
+
+      - name: Compare with previous Q6_archive_date.txt
+        run: |
+          LAST_FILE=$(ls -t Q6_archive_*.txt | head -n 2 | tail -n 1)
+          if [ -f "$LAST_FILE" ]; then
+            diff $LAST_FILE Q6_archive_${DATE}.txt > Q6_différences.txt
+          else
+            echo "Pas de fichier précédent à comparer." > Q6_différences.txt
+          fi
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "KillianDlds"
+          git config --global user.email "killian.deslandes53@gmail.com"
+
+      - name: Add files to git and commit changes
+        run: |
+          git add -A
+          git status
+          git commit -m "Add Q6_archive_date.txt with Q6.java content and differences file" || echo "No changes to commit"
+
+      - name: Push changes
+        run: |
+          git push origin main
