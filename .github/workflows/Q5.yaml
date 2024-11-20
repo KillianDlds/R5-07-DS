@@ -1,0 +1,41 @@
+name: Q5 Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create-and-push-file:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Create Q5_archive_date.txt
+        run: |
+          DATE=$(date +%d-%m-%Y)
+          FILENAME="Q5_archive_${DATE}.txt"
+          
+          echo "Nom : Deslandes" > $FILENAME
+          echo "Prénom : Killian" >> $FILENAME
+          echo "Email : killian.deslandes53@gmail.com" >> $FILENAME
+          echo "" >> $FILENAME
+          echo "Contenu de Q5.java :" >> $FILENAME
+          cat Q5.java >> $FILENAME
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
+      - name: Add files to git and commit changes
+        run: |
+          git add -A
+          git status
+          git commit -m "Add Q5_archive_date.txt with Q5.java content" || echo "No changes to commit"
+
+      - name: Push changes
+        run: |
+          git push
