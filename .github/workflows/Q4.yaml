@@ -1,0 +1,41 @@
+name: Q4 Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create-and-push-file:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Create Q4_archive_date.txt
+        run: |
+          DATE=$(date +%d-%m-%Y)
+          FILENAME="Q4_archive_${DATE}.txt"
+          
+          echo "Nom : Deslandes" > $FILENAME
+          echo "Prénom : Killian" >> $FILENAME
+          echo "Email : killian.deslandes53@gmail.com" >> $FILENAME
+          echo "" >> $FILENAME
+          echo "Contenu de Q4.java :" >> $FILENAME
+          cat Q4.java >> $FILENAME
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
+      - name: Pull latest changes
+        run: |
+          git pull origin main --rebase
+
+      - name: Commit and push changes
+        run: |
+          git add $FILENAME
+          git commit -m "Add $FILENAME with Q4.java content and user details" || echo "No changes to commit"
+          git push
