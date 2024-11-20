@@ -3,11 +3,11 @@ name: Q3 Workflow
 on:
   push:
     branches:
-      - main 
+      - main
 
 jobs:
   create-and-push-file:
-    runs-on: ubuntu-latest  
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
@@ -15,20 +15,25 @@ jobs:
 
       - name: Create Q3_archive_java.txt
         run: |
-          # Ajouter vos informations dans le fichier
+          if [ ! -f Q3.java ]; then
+            echo "Le fichier Q3.java n'a pas été trouvé !" >&2
+            exit 1
+          fi
           echo "Nom : Deslandes" > Q3_archive_java.txt
           echo "Prénom : Killian" >> Q3_archive_java.txt
           echo "Email : killian.deslandes53@gmail.com" >> Q3_archive_java.txt
           echo "" >> Q3_archive_java.txt
           echo "Contenu de Q3.java :" >> Q3_archive_java.txt
-          
-          # Ajouter le contenu de Q3.java dans le fichier
           cat Q3.java >> Q3_archive_java.txt
 
       - name: Configure Git
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
+
+      - name: Pull latest changes
+        run: |
+          git pull origin main --rebase
 
       - name: Commit and push changes
         run: |
