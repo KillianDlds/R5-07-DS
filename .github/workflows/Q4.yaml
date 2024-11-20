@@ -13,6 +13,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Verify Q4.java exists
+        run: |
+          if [ ! -f Q4.java ]; then
+            echo "Le fichier Q4.java n'a pas été trouvé !"
+            exit 1
+          else
+            echo "Le fichier Q4.java a été trouvé."
+          fi
+
       - name: Create Q4_archive_date.txt
         run: |
           DATE=$(date +%d-%m-%Y)
@@ -24,11 +33,6 @@ jobs:
           echo "" >> $FILENAME
           echo "Contenu de Q4.java :" >> $FILENAME
           
-          if [ ! -f Q4.java ]; then
-            echo "Le fichier Q4.java n'existe pas !" >&2
-            exit 1
-          fi
-
           cat Q4.java >> $FILENAME
 
       - name: List files after creation
@@ -45,8 +49,12 @@ jobs:
         run: |
           git pull origin main --rebase
 
-      - name: Commit and push changes
+      - name: Add all files to Git
         run: |
           git add -A
+          git status
+
+      - name: Commit and push changes
+        run: |
           git commit -m "Add $FILENAME with Q4.java content and user details" || echo "No changes to commit"
           git push
