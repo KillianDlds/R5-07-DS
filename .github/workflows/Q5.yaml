@@ -13,6 +13,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Check git status
+        run: |
+          git status
+
+      - name: Add and commit unstaged changes
+        run: |
+          git add -A
+          git commit -m "Commit unstaged changes" || echo "No changes to commit"
+
+      - name: Pull changes from the repository
+        run: |
+          git pull origin main --rebase
+
       - name: Create Q5_archive_date.txt
         run: |
           DATE=$(date +%d-%m-%Y)
@@ -24,10 +37,6 @@ jobs:
           echo "Contenu de Q5.java :" >> $FILENAME
           cat Q5.java >> $FILENAME
 
-      - name: Check git status
-        run: |
-          git status
-
       - name: Configure Git
         run: |
           git config --global user.name "KillianDlds"
@@ -36,7 +45,6 @@ jobs:
       - name: Add files to git and commit changes
         run: |
           git add -A
-          git status
           git commit -m "Add Q5_archive_date.txt with Q5.java content" || echo "No changes to commit"
 
       - name: Push changes
