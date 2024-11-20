@@ -22,7 +22,7 @@ jobs:
       # Étape 3 : Configurer Git pour le commit
       - name: Configure Git
         run: |
-          git config --global user.name "KillianDlds
+          git config --global user.name "KillianDlds"
           git config --global user.email "killian.deslandes53@gmail.com"
 
       # Étape 4 : Ajouter et committer le nouveau fichier
