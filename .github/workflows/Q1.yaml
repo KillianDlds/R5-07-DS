@@ -1,1 +1,37 @@
+name: Q1 Workflow
 
+on:
+  push:
+    branches:
+      - main  
+
+jobs:
+  create-and-push-file:
+    runs-on: ubuntu-latest 
+
+    steps:
+      # Étape 1 : Cloner le dépôt
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Étape 2 : Copier le contenu de README.md dans un nouveau fichier
+      - name: Copy README.md to Q1_archive_README.md
+        run: |
+          cp README.md Q1_archive_README.md
+
+      # Étape 3 : Configurer Git pour le commit
+      - name: Configure Git
+        run: |
+          git config --global user.name "KillianDlds
+          git config --global user.email "killian.deslandes53@gmail.com"
+
+      # Étape 4 : Ajouter et committer le nouveau fichier
+      - name: Commit changes
+        run: |
+          git add Q1_archive_README.md
+          git commit -m "Add Q1_archive_README.md"
+
+      # Étape 5 : Pousser les changements vers le dépôt
+      - name: Push changes
+        run: |
+          git push
