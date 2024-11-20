@@ -23,7 +23,18 @@ jobs:
           echo "Email : killian.deslandes53@gmail.com" >> $FILENAME
           echo "" >> $FILENAME
           echo "Contenu de Q4.java :" >> $FILENAME
+          
+          if [ ! -f Q4.java ]; then
+            echo "Le fichier Q4.java n'existe pas !" >&2
+            exit 1
+          fi
+
           cat Q4.java >> $FILENAME
+
+      - name: List files after creation
+        run: |
+          echo "Fichier créé : $FILENAME"
+          ls -l
 
       - name: Configure Git
         run: |
@@ -36,6 +47,6 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          git add $FILENAME
+          git add -A
           git commit -m "Add $FILENAME with Q4.java content and user details" || echo "No changes to commit"
           git push
